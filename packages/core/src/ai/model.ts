@@ -60,7 +60,10 @@ const mockModel: AiModel = async () => ({
 });
 
 export function aiIsOn(env: Env = aiEnv()): boolean {
-  return Boolean(env.ANTHROPIC_API_KEY?.trim());
+  return Boolean(
+    env.OPENROUTER_API_KEY?.trim() ||
+    env.ANTHROPIC_API_KEY?.trim(),
+  );
 }
 
 /** Anthropic Messages API over fetch. Errors carry the HTTP status only, never the body. */
