@@ -106,3 +106,58 @@ async function callAnthropic(key: string, req: AiRequest): Promise<AiResponse> {
     .trim();
   return { text, inputTokens, outputTokens };
 }
+
+async function callOpenRouter(
+  key: string,
+  model: string,
+  req: AiRequest,
+): Promise<AiResponse> {
+  let res: Response;
+
+  try {
+    res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: req.system },
+          { role: "user", content: req.user },
+        ],
+        max_tokens: req.maxTokens,
+      }),
+      signal: AbortSignal.timeout(AI_DEFAULTS.requestTimeoutMs),
+    });
+  } catch {
+    throw new CoreError(
+      "CONFLICT",
+      "The AI service could not be reached. Try again.",
+    );
+  }
+
+  if (!res.ok) {
+    throw new CoreError(
+      "CONFLICT",
+      `The AI service answered with an error (HTTP ${res.status}).`,
+    );
+  }
+
+  const body = (await res.json()) as {
+    choices?: {
+      message?: { content?: string | null };
+    }[];
+    usage?: {
+      prompt_tokens?: number;
+      completion_tokens?: number;
+    };
+  };
+
+  return {
+    text: body.choices?.[0]?.message?.content?.trim() ?? "",
+    inputTokens: body.usage?.prompt_tokens ?? 0,
+    outputTokens: body.usage?.completion_tokens ?? 0,
+  };
+}
