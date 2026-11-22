@@ -30,6 +30,17 @@ export function aiEnv(): Env {
  */
 export function getAiModel(env: Env = aiEnv()): AiModel | null {
   if (override.model) return override.model;
+
+  const openRouterKey = env.OPENROUTER_API_KEY?.trim();
+  if (openRouterKey) {
+    return (req) =>
+      callOpenRouter(
+        openRouterKey,
+        env.OPENROUTER_MODEL?.trim() || "anthropic/claude-haiku-5.5",
+        req,
+      );
+  }
+
   const key = env.ANTHROPIC_API_KEY?.trim();
   if (!key) return mockModelAllowed(env) ? mockModel : null;
   return (req) => callAnthropic(key, req);
