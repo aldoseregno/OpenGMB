@@ -85,16 +85,32 @@ describe("brandTokens sweep", () => {
 });
 
 describe("shellBrand", () => {
-  it("shows OpenGMB by Synectus when the agency set no logo or colour", () => {
+  it("shows OpenGMB by Honeysoup when the agency set no logo or colour", () => {
     expect(
       shellBrand({ agencyName: "Synectus", logoUrl: null, primaryColor: null, accentColor: null }),
-    ).toEqual({ name: "OpenGMB", subline: "by Synectus", mark: "O", logoUrl: null });
+    ).toEqual({ name: "OpenGMB", subline: "by Honeysoup", mark: "O", logoUrl: null });
   });
 
   it("shows the agency once it set a colour", () => {
     expect(
       shellBrand({ agencyName: "Example Agency", logoUrl: null, primaryColor: "#1d4ed8", accentColor: null }),
-    ).toEqual({ name: "Example Agency", subline: "Powered by OpenGMB", mark: "E", logoUrl: null });
+    ).toEqual({ name: "Example Agency", subline: null, mark: "E", logoUrl: null });
+  });
+
+  it("omits the OpenGMB subline for a logo-branded FlowPilot agency", () => {
+    expect(
+      shellBrand({
+        agencyName: "FlowPilot",
+        logoUrl: "https://flowpilot.example/logo.png",
+        primaryColor: null,
+        accentColor: null,
+      }),
+    ).toEqual({
+      name: "FlowPilot",
+      subline: null,
+      mark: "F",
+      logoUrl: "https://flowpilot.example/logo.png",
+    });
   });
 
   it("keeps OpenGMB when the agency only renamed itself", () => {

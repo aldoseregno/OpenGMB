@@ -122,9 +122,11 @@ export function AppShell({
             <span className="truncate font-display text-[15px] font-extrabold" title={brand.name}>
               {brand.name}
             </span>
-            <span className="truncate text-[11px] text-muted-foreground" title={brand.subline}>
-              {brand.subline}
-            </span>
+            {brand.subline && (
+              <span className="truncate text-[11px] text-muted-foreground" title={brand.subline}>
+                {brand.subline}
+              </span>
+            )}
           </span>
         </Link>
         {scope && (

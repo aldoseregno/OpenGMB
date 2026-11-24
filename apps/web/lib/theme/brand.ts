@@ -60,7 +60,7 @@ export function brandCss(b: Colours | null): string | null {
   return t ? themeCss(t.light, t.dark) : null;
 }
 
-export type ShellBrand = { name: string; subline: string; mark: string; logoUrl: string | null };
+export type ShellBrand = { name: string; subline: string | null; mark: string; logoUrl: string | null };
 
 /**
  * The top-left brand block. branding.get always returns an agencyName (it falls back to the
@@ -71,7 +71,7 @@ export function shellBrand(b: Branding | null): ShellBrand {
   const name = branded && b ? b.agencyName.trim() || "OpenGMB" : "OpenGMB";
   return {
     name,
-    subline: branded ? "Powered by OpenGMB" : "by Synectus",
+    subline: branded ? null : "by Honeysoup",
     mark: name.trim().charAt(0).toUpperCase() || "O",
     logoUrl: branded && b?.logoUrl ? b.logoUrl : null,
   };
