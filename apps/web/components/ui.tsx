@@ -36,7 +36,7 @@ export function Card({
           </span>
         )}
         <span className="font-display text-xl font-extrabold">{brand.name}</span>
-        <span className="text-sm text-muted-foreground">{brand.subline}</span>
+        {brand.subline && <span className="text-sm text-muted-foreground">{brand.subline}</span>}
       </div>
       <main className="mx-4 my-6 flex flex-col gap-5 rounded-panel border border-border bg-card p-6 shadow-card sm:mx-auto sm:my-12 sm:w-full sm:max-w-[440px] sm:p-8">
         <div className="flex flex-col gap-1.5">
